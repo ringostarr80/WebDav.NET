@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDavClientLibrary", "WebDav\WebDavClientLibrary.csproj", "{8C077137-ECBA-402D-B941-165950E7AF80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDavClientDemo", "WebDavClientDemo\WebDavClientDemo.csproj", "{C72694CC-206F-4D86-95FE-188F5BF71651}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDavWinFormsClientDemo", "WebDavWinFormsClientDemo\WebDavWinFormsClientDemo.csproj", "{312A3E0B-E2E7-4D80-BA16-AB6D3ADF7A0E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebDavTest", "WebDavTest\WebDavTest.csproj", "{92FC8BA2-3C3F-4F60-BC74-DDD2BF2AE4BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,14 +19,6 @@ Global
 		{8C077137-ECBA-402D-B941-165950E7AF80}.Debug|x86.Build.0 = Debug|x86
 		{8C077137-ECBA-402D-B941-165950E7AF80}.Release|x86.ActiveCfg = Release|x86
 		{8C077137-ECBA-402D-B941-165950E7AF80}.Release|x86.Build.0 = Release|x86
-		{92FC8BA2-3C3F-4F60-BC74-DDD2BF2AE4BC}.Debug|x86.ActiveCfg = Debug|x86
-		{92FC8BA2-3C3F-4F60-BC74-DDD2BF2AE4BC}.Debug|x86.Build.0 = Debug|x86
-		{92FC8BA2-3C3F-4F60-BC74-DDD2BF2AE4BC}.Release|x86.ActiveCfg = Release|x86
-		{92FC8BA2-3C3F-4F60-BC74-DDD2BF2AE4BC}.Release|x86.Build.0 = Release|x86
-		{C72694CC-206F-4D86-95FE-188F5BF71651}.Debug|x86.ActiveCfg = Debug|x86
-		{C72694CC-206F-4D86-95FE-188F5BF71651}.Debug|x86.Build.0 = Debug|x86
-		{C72694CC-206F-4D86-95FE-188F5BF71651}.Release|x86.ActiveCfg = Release|x86
-		{C72694CC-206F-4D86-95FE-188F5BF71651}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = WebDavWinFormsClientDemo\WebDavWinFormsClientDemo.csproj
