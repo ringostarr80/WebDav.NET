@@ -46,7 +46,11 @@ namespace WebDav {
             /// </summary>
             /// <param name="filename">Full path of a file to be uploaded from</param>
             public void Upload(string filename) {
+				NetworkCredential credentials = (NetworkCredential)this._credentials;
+                string auth = "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(credentials.UserName + ":" + credentials.Password));
 				WebClient webClient = new WebClient();
+				webClient.Credentials = credentials;
+				webClient.Headers.Add("Authorization", auth);
 				webClient.UploadFile(this.Href, "PUT", filename);
             }
 

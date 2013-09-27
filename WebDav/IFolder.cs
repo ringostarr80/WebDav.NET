@@ -187,6 +187,9 @@ namespace WebDav {
 					XmlDocument XmlDoc = new XmlDocument();
 					XmlDoc.LoadXml(response);
 					XmlNodeList XmlResponseList = XmlDoc.GetElementsByTagName("D:response");
+					if (XmlResponseList.Count == 0) {
+						XmlResponseList = XmlDoc.GetElementsByTagName("d:response");
+					}
 					WebDavHierarchyItem[] children = new WebDavHierarchyItem[XmlResponseList.Count];
 					int counter = 0;
 					foreach(XmlNode XmlCurrentResponse in XmlResponseList) {
