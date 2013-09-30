@@ -194,6 +194,7 @@ namespace WebDav {
 					int counter = 0;
 					foreach(XmlNode XmlCurrentResponse in XmlResponseList) {
 						WebDavHierarchyItem item = new WebDavHierarchyItem();
+						item.SetCredentials(this._credentials);
 
 						foreach(XmlNode XmlCurrentNode in XmlCurrentResponse.ChildNodes) {
 							switch(XmlCurrentNode.LocalName) {
