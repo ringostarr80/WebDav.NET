@@ -74,22 +74,6 @@ namespace WebDav {
 			/// <returns>Stream to write resource content.</returns>
 			public Stream GetWriteStream(long contentLength) {
 				return this.GetWriteStream("application/octet-stream", contentLength);
-
-				/*
-				NetworkCredential credentials = (NetworkCredential)this._credentials;
-				string auth = "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(credentials.UserName + ":" + credentials.Password));
-				HttpWebRequest webRequest = (HttpWebRequest)HttpWebRequest.Create(this.Href);
-				webRequest.AllowWriteStreamBuffering = false;
-				webRequest.Method = "PUT";
-				webRequest.Credentials = credentials;
-				webRequest.ContentLength = contentLength;
-				webRequest.Headers.Add("Authorization", auth);
-				Stream webStream = webRequest.GetRequestStream();
-				if (webStream.CanTimeout) {
-					webStream.WriteTimeout = this.TimeOut * 1000;
-				}
-				return webStream;
-				*/
 			}
 
 			/// <summary>
@@ -99,46 +83,47 @@ namespace WebDav {
 			/// <param name="contentLength">Length of data to be written.</param>
 			/// <returns>Stream to write resource content.</returns>
 			public Stream GetWriteStream(string contentType, long contentLength) {
-				TcpClient tcpClient = new TcpClient(this.Href.Host, this.Href.Port);
-				if (tcpClient.Connected) {
-					NetworkCredential credentials = (NetworkCredential)this._credentials;
-					string auth = "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(credentials.UserName + ":" + credentials.Password));
+				using(TcpClient tcpClient = new TcpClient(this.Href.Host, this.Href.Port)) {
+					if (tcpClient.Connected) {
+						NetworkCredential credentials = (NetworkCredential)this._credentials;
+						string auth = "Basic " + Convert.ToBase64String(System.Text.Encoding.Default.GetBytes(credentials.UserName + ":" + credentials.Password));
 
-					try {
-						if (this.TimeOut != System.Threading.Timeout.Infinite) {
-							tcpClient.SendTimeout = this.TimeOut;
-							tcpClient.ReceiveTimeout = this.TimeOut;
-						} else {
+						try {
+							if (this.TimeOut != System.Threading.Timeout.Infinite) {
+								tcpClient.SendTimeout = this.TimeOut;
+								tcpClient.ReceiveTimeout = this.TimeOut;
+							} else {
+								tcpClient.SendTimeout = 0;
+								tcpClient.ReceiveTimeout = 0;
+							}
+						} catch(SocketException e) {
+							Console.WriteLine("TcpClient.Timeout SocketException: " + e.Message);
+							Console.WriteLine("TcpClient.Timeout set timeout to default value 0!");
 							tcpClient.SendTimeout = 0;
 							tcpClient.ReceiveTimeout = 0;
 						}
-					} catch(SocketException e) {
-						Console.WriteLine("TcpClient.Timeout SocketException: " + e.Message);
-						Console.WriteLine("TcpClient.Timeout set timeout to default value 0!");
-						tcpClient.SendTimeout = 0;
-						tcpClient.ReceiveTimeout = 0;
-					}
-					NetworkStream networkStream = tcpClient.GetStream();
-					if (networkStream.CanTimeout) {
-						try {
-							networkStream.WriteTimeout = this.TimeOut;
-							networkStream.ReadTimeout = this.TimeOut;
-						} catch(Exception e) {
-							Console.WriteLine("NetworkStream.Timeout Exception: " + e.Message);
+						NetworkStream networkStream = tcpClient.GetStream();
+						if (networkStream.CanTimeout) {
+							try {
+								networkStream.WriteTimeout = this.TimeOut;
+								networkStream.ReadTimeout = this.TimeOut;
+							} catch(Exception e) {
+								Console.WriteLine("NetworkStream.Timeout Exception: " + e.Message);
+							}
 						}
-					}
-					byte[] methodBuffer = Encoding.UTF8.GetBytes("PUT " + this.Href.AbsolutePath + " HTTP/1.1\r\n");
-					byte[] hostBuffer = Encoding.UTF8.GetBytes("Host: " + this.Href.Host + "\r\n");
-					byte[] contentLengthBuffer = Encoding.UTF8.GetBytes("Content-Length: " + contentLength + "\r\n");
-					byte[] authorizationBuffer = Encoding.UTF8.GetBytes("Authorization: " + auth + "\r\n");
-					byte[] connectionBuffer = Encoding.UTF8.GetBytes("Connection: Close\r\n\r\n");
-					networkStream.Write(methodBuffer, 0, methodBuffer.Length);
-					networkStream.Write(hostBuffer, 0, hostBuffer.Length);
-					networkStream.Write(contentLengthBuffer, 0, contentLengthBuffer.Length);
-					networkStream.Write(authorizationBuffer, 0, authorizationBuffer.Length);
-					networkStream.Write(connectionBuffer, 0, connectionBuffer.Length);
+						byte[] methodBuffer = Encoding.UTF8.GetBytes("PUT " + this.Href.AbsolutePath + " HTTP/1.1\r\n");
+						byte[] hostBuffer = Encoding.UTF8.GetBytes("Host: " + this.Href.Host + "\r\n");
+						byte[] contentLengthBuffer = Encoding.UTF8.GetBytes("Content-Length: " + contentLength + "\r\n");
+						byte[] authorizationBuffer = Encoding.UTF8.GetBytes("Authorization: " + auth + "\r\n");
+						byte[] connectionBuffer = Encoding.UTF8.GetBytes("Connection: Close\r\n\r\n");
+						networkStream.Write(methodBuffer, 0, methodBuffer.Length);
+						networkStream.Write(hostBuffer, 0, hostBuffer.Length);
+						networkStream.Write(contentLengthBuffer, 0, contentLengthBuffer.Length);
+						networkStream.Write(authorizationBuffer, 0, authorizationBuffer.Length);
+						networkStream.Write(connectionBuffer, 0, connectionBuffer.Length);
 
-					return networkStream;
+						return networkStream;
+					}
 				}
 
 				throw new IOException("could not connect to server");
